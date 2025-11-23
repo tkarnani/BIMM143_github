@@ -1,0 +1,1 @@
+This is a sample nano text editor that will be available on every unix machine.

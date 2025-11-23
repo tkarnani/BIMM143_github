@@ -1,0 +1,28 @@
+This is a sample nano text editor that will be available on every unix machine.
+
+Log into EC2 instance:
+
+Instance ID
+i-0056e5d484ebfc9ea (bimm143_tkarnani)
+
+- Open an SSH client.
+
+- Locate your private key file. The key used to launch this instance is bimm143_tkarnani.pem
+
+- Run this command, if necessary, to ensure your key is not publicly viewable.
+chmod 400 ~/Downloads/bimm143_tkarnani.pem
+
+- Connect to your instance using its Public DNS:
+ec2-54-187-240-232.us-west-2.compute.amazonaws.com
+
+Example:
+
+ssh -i ~/Downloads/bimm143_tkarnani.pem ubuntu@ec2-54-187-240-232.us-west-2.compute.amazonaws.com
+
+Note: In most cases, the guessed username is correct. However, read your AMI usage instructions to check if the AMI owner has changed the default AMI username.
+
+
+To copy once done
+
+scp -i ~/Downloads/bimm143_tkarnani.pem ubuntu@ec2-54-187-240-232.us-west-2.compute.amazonaws.com:~/work/myresults.tsv .
+scp -i ~/Downloads/bimm143_tkarnani.pem ubuntu@ec2-54-187-240-232.us-west-2.compute.amazonaws.com:~/work/mmsecond.x.zebrafish.txt .

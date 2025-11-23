@@ -1,0 +1,215 @@
+---
+title: "Lab 7: Machine Learning 1"
+author: "Tusha (A17339806)"
+format: pdf
+---
+
+Fundamentals of machine learning including clustering and dimensionality reduction
+
+Creating a dataset:
+
+```{r}
+hist(rnorm(500,mean=5))
+```
+
+```{r}
+x <- c(rnorm(30,mean=-3),rnorm(30,mean=3))
+y <- rev(x)
+
+data <- cbind(x,y)
+```
+
+## K-means clustering
+
+```{r}
+k <- kmeans(data, 2)
+k
+```
+
+
+> Question: How many points are in each cluster?
+
+```{r}
+k$size
+```
+
+> What components of your result object details:
+  - cluster assignment/membership?
+  - cluster center?
+  
+```{r}
+k$cluster
+k$centers
+```
+
+> Make a clustering results figure of the data colored by cluster membership
+
+```{r}
+plot(data, col=c("red", "blue"))
+```
+
+```{r}
+plot(data, col=k$cluster)
+points(k$centers, col="royalblue", pch=20, cex=2)
+
+# pch is plotting character i.e. dot type
+# cex is character expansion
+```
+
+K-means clustering is very popular as it is very fast and relatively straightforward: it takes numeric data as input and return the cluster membership, etc.
+
+The problem is that we tell k-means how many clusters we want
+
+> Run kmeans again and cluster it into 4 groups and plot the results like above
+
+```{r}
+k4 <- kmeans(data, 4)
+plot(data, col=k4$cluster)
+points(k4$centers, col="royalblue", pch=20, cex=2)
+```
+
+It picks lowest value of total variation within clusters. That is the tightest fit and returns that.
+There is a large reduction in SS at k=2 but after that the values do not go down as quickly.
+ 
+```{r}
+k1 <- kmeans(data, 1)
+k3 <- kmeans(data, 3)
+k5 <- kmeans(data, 5)
+
+ss <- c(k1$tot.withinss, k$tot.withinss, k3$tot.withinss, k4$tot.withinss, k5$tot.withinss)
+ss
+```
+
+```{r}
+plot(ss, type="b", xlab="k", ylab="total within ss")
+```
+
+```{r}
+n <- NULL
+
+for (i in 1:5)
+{
+  n <- c(n, kmeans(data, i)$tot.withinss)
+}
+
+plot(n, type="b")
+```
+
+## Hierarchichal Clustering
+
+We can't just input our data. We need to first calculate a distance matrix for our data (e.g. `dist()`) and use it as input for the `hclust()` function.
+Not just euclidean distance but also sequence similarity, amino acid similarity, etc.
+
+```{r}
+d <- dist(data) 
+# 60x60 matrix with the distance of every point in the dataset with every other point
+
+hc <- hclust(d)
+hc
+```
+
+There is a plot method for hclust results
+
+```{r}
+plot(hc)
+abline(h=8, col="red")
+```
+
+The numbers between 1-30 and 31-60 are on separate sides of the graphs i.e. they are highly separated by distance.
+
+To get our cluster membership vector (i.e. our main clustering result) we can "cut" the tree at a given height or a height that yields a given "k" number of groups.
+
+```{r}
+hccol <- cutree(hc, h=8)
+```
+
+> Plot the data with our hclust result coloring
+
+```{r}
+plot(data, col=hccol)
+```
+
+## Principal Component Analysis
+
+### PCA of UK food data
+
+```{r}
+url <- "https://tinyurl.com/UK-foods"
+food <- read.csv(url, row.names=1)
+dim(food)
+head(food)
+```
+
+```{r}
+# rownames(food) <- food [,1]
+# food <- food[,-1]
+# food
+
+# Can get disruptive if run again (keeps removing columns)
+```
+
+Some base figures
+
+```{r}
+barplot(as.matrix(food), beside=T, col=rainbow(nrow(food)))
+```
+
+```{r}
+barplot(as.matrix(food), beside=F, col=rainbow(nrow(food)))
+```
+
+There is one plot that can be useful for small datasets
+
+```{r}
+pairs(food, col=rainbow(10), pch=16)
+```
+
+
+> It can be challengin to spot major trends and patters even in relatively small multivariate datasets (here we have 17, typically we have 1000s)
+
+
+### PCA
+
+In base R, the main PCA function is `prcomp()`
+
+I will take the transpose of our food data so the "foods" are in the columns
+
+```{r}
+pca <- prcomp(t(food))
+summary(pca)
+```
+
+```{r}
+pca$x
+```
+
+```{r}
+cols <- c("black","red","blue","darkgreen")
+plot(pca$x[,1], pca$x[,2], col=cols, pch=16, xlab="PCA1", ylab="PCA2")
+```
+
+```{r}
+library(ggplot2)
+```
+
+```{r}
+ggplot(pca$x) +
+  aes(PC1, PC2) +
+  geom_point(col=cols) +
+  theme_minimal()
+```
+
+```{r}
+pca$rotation
+
+# How much each of these variables weighs on each of the axes/pcs
+# Telling us what makes two countries different from each other (based on PCA results)
+```
+
+```{r}
+ggplot(pca$rotation) +
+  aes(PC1, rownames(pca$rotation)) +
+  geom_col() +
+  theme_minimal()
+```
+

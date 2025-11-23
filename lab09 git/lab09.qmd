@@ -1,0 +1,151 @@
+---
+title: "Lab 9: Structural Bioinformatics"
+author: "Tusha (A17339806)"
+format: html
+---
+
+## Exploring the PDB Database
+
+The main database for structural biology is PDB.
+
+```{r}
+pdb <- read.csv("Data Export Summary.csv")
+pdb
+```
+
+```{r message=FALSE}
+library(readr)
+
+pdb <- read_csv("Data Export Summary.csv")
+```
+
+
+> Q1: What percentage of structures in the PDB are solved by X-Ray and Electron Microscopy.
+
+```{r}
+total <- sum(pdb$Total)
+xr <- sum(pdb$`X-ray`)
+em <- sum(pdb$EM)
+
+xrpercent <- (xr/total) *100
+empercent <- (em/total) *100
+```
+
+The percentage of structures in the PDB solved by X-Ray is 81.48% and Electron Microscopy is 12.22%.
+
+> Q2: What proportion of structures in the PDB are protein?
+
+```{r}
+prot <- as.integer(pdb[1,"Total"])
+
+protpercent <- (prot/total) *100
+```
+
+The percentage of structures in the PDB that are proteins is 86.05%
+
+> Q3: Type HIV in the PDB website search box on the home page and determine how many HIV-1 protease structures are in the current PDB?
+
+There are 4865 HIV-1 Protease structures in the current PDB.
+
+
+## Exploring PDB Structures
+
+```{r}
+library(bio3d)
+
+hiv <- read.pdb("1hsg")
+hiv
+```
+
+Using Mol* viewer to explore the structure
+
+![My first view of HIV-Pr](1HSG.png)
+
+> Q4: Water molecules normally have 3 atoms. Why do we see just one atom per water molecule in this structure?
+
+This is because the Mol* viewer does not show hydrogen atoms.
+
+> Q5: There is a critical “conserved” water molecule in the binding site. Can you identify this water molecule? What residue number does this water molecule have?
+
+The water molecule is residue number 304
+
+> Q6: Generate and save a figure clearly showing the two distinct chains of HIV-protease along with the ligand. You might also consider showing the catalytic residues ASP 25 in each chain and the critical water (we recommend “Ball & Stick” for these side-chains). Add this figure to your Quarto document.
+
+![ASP residues](1HSGspacefill.png)
+
+```{r}
+hiv
+```
+
+> Q7: How many amino acid residues are there in this pdb object? 
+
+198
+
+> Q8: Name one of the two non-protein residues? 
+
+HOH
+
+> Q9: How many protein chains are in this structure? 
+
+2
+
+```{r}
+pdbseq(hiv)
+```
+
+```{r}
+chainA_seq <- pdbseq(trim.pdb(hiv, chain="A"))
+```
+
+```{r}
+# library(NGLVieweR)
+# install.packages("bio3d")
+# library(bio3d)
+# install.packages("bio3dview")
+# library(bio3dview)
+# install.packages("pak")
+# pak::pak("bioboot/bio3dview")
+# install.packages("NGLVieweR")
+
+# view.pdb(hiv) |> setSpin()
+```
+
+![](spin.png)
+
+
+
+```{r}
+# view.pdc(hiv, colorScheme="sse")
+# view.pdc(hiv, colorScheme="chain", col=c("blue","orange"), backgroundColor="pink")
+
+```
+
+
+## Predict protein flexibility
+
+We can run a bioinformatics analysis to predict protein dynamics i.e. functional motions
+
+```{r}
+adk <- read.pdb("6s36")
+adk
+```
+
+```{r}
+m <- nma(adk)
+plot(m)
+```
+
+Regions with peaks are predicted to be more flexible and dynamic than the flat regions.
+
+Generate a "trajectory" of predicted motion
+
+```{r}
+# mktrj(m, file="ADK_nma.pdb")
+```
+
+![](outputmov.png)
+
+```{r}
+# bio3dview
+# view.nma(m, pdb=adk)
+```
