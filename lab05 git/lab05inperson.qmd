@@ -1,7 +1,7 @@
 ---
 title: "Lab 5: Data Visualization with ggplot"
 author: "Tusha (A17339806)"
-format: pdf
+format: gfm
 ---
 
 Today we are exploring the **ggplot** package and how to use it for data visualization. Other ways in which figures and plots can be made in R are: 
