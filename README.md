@@ -18,7 +18,7 @@ Here is my classwork for [BIMM 143 at UC San Diego](https://bioboot.github.io/bi
 
 - Class 11 - [Structural Bioinformatics Part 2]()
 
-- Class 12 - [Transcriptomics and RNA Seq Analysis]
+- Class 12 - [Transcriptomics and RNA Seq Analysis]()
 
 - Class 13 - Veterans Day Holiday
 
