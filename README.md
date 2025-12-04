@@ -4,7 +4,7 @@ Here is my classwork for [BIMM 143 at UC San Diego](https://bioboot.github.io/bi
 
 - Class 04 - [R Fundamentals]()
 
-- Class 05 - [Data Visualization](lab05%20git/lab05inperson.md)
+- Class 05 - [Data Visualization]("lab05\ git/lab05inperson.md")
 
 - Class 06 - [Writing R Functions](lab06%20git/lab06.md)
 
