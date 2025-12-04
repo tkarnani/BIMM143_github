@@ -1,4 +1,3 @@
-# BIMM143
-### Tusha Karnani
+# BIMM143 Projects
 
-Classwork for BIMM143 at UC San Diego
+Here is my classwork for BIMM 143 from Fall '25
