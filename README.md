@@ -32,4 +32,4 @@ Here is my classwork for [BIMM 143 at UC San Diego](https://bioboot.github.io/bi
 
 - Class 18 - Thanksgiving Holiday
 
-- Class 19 - [Mini Project - Web Scraping and JSON - Pertussis]
+- Class 19 - [Mini Project - Web Scraping and JSON - Pertussis]()
